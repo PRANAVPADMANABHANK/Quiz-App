@@ -148,4 +148,8 @@ body {
   .explanation.incorrect {
     background-color: lightcoral;
   }
+  .correct-indicator {
+    font-weight: bold;
+    color: green;
+  }
   

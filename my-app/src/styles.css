@@ -1,0 +1,151 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f7ff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .quiz-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 86px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header h2 {
+    margin: 0;
+  }
+  
+  .progress {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .need-help {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  
+  .categories {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+  
+  .category {
+    width: 30%;
+    text-align: center;
+  }
+  
+  .category h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #666;
+  }
+  
+  .category.active h4 {
+    color: #007bff;
+  }
+  
+  .category.locked h4 {
+    color: #ccc;
+  }
+  
+  .numbers {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .number {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+  }
+  
+  .number.active {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+  
+  .number.locked {
+    background: #f1f1f1;
+    color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* button:nth-child(2) {
+    background: transparent;
+    color: #007bff;
+    text-decoration: underline;
+  } */
+  .option {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid gray;
+    cursor: pointer;
+  }
+  
+  .option.selected {
+    background-color: blue;
+    color: white;
+  }
+  
+  .option.correct {
+    background-color: green;
+    color: white;
+  }
+  
+  .option.incorrect {
+    background-color: red;
+    color: white;
+  }
+  
+  .explanation.correct {
+    background-color: lightgreen;
+  }
+  
+  .explanation.incorrect {
+    background-color: lightcoral;
+  }
+  

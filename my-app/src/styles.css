@@ -243,7 +243,17 @@ h1 {
   font-family: 'Arial', sans-serif;
   font-size: 3rem;
   margin-bottom: 20px;
+  background: white;
+  padding: 10px 80px;
+  color: rgb(245, 79, 29);
+  border-radius: 10px;
+  border: 1px solid;
+  text-align: center; /* Center the text */
+  margin-left: auto;  /* Center the h1 horizontally */
+  margin-right: auto; /* Center the h1 horizontally */
+  width: fit-content; /* Adjust the width to the content */
 }
+
 
 .loading {
   display: flex;

@@ -77,6 +77,12 @@ app.post("/api/saveExplanation", async (req, res) => {
   }
 });
 
+// Hello World route for test
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
+});   
+
+
 // Start the server
 const PORT = 5000;
 app.listen(PORT, () => {

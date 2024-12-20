@@ -189,7 +189,7 @@ function Quiz() {
       </div>
 
       {/* Loading spinner */}
-      {refreshing && <div className="loading-spinner">Loading...</div>}
+      {refreshing && <div className="loading-spinner"></div>}
     </div>
   );
 }

@@ -1,31 +1,18 @@
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
+const Question = require("./models/question"); // Import the Question model
 
 const app = express();
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON request bodies
 
 mongoose
-  .connect(
-    "mongodb+srv://pranavkkeloth:8RPvIlF3g1OrE4mA@quiz-app.bpk2g.mongodb.net/quiz"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Failed to connect to MongoDB", err));
-
-// Updated schema to include selectedOption
-const questionSchema = new mongoose.Schema({
-  category: String,
-  title: String,
-  options: [String],
-  correctAnswer: Number,
-  explanation: String,
-  selectedOption: Number, // Field to store the selected option
-  isCorrect: Boolean, // New field to store correctness of the selected option
-});
-
-
-const Question = mongoose.model("Question", questionSchema);
 
 // GET API to fetch questions
 app.get("/api/questions", async (req, res) => {
@@ -57,7 +44,6 @@ app.post("/api/questions", async (req, res) => {
   }
 });
 
-// POST API to save explanation details and update selectedOption in the question
 // POST API to save explanation details and update selectedOption and isCorrect in the question
 app.post("/api/saveExplanation", async (req, res) => {
   try {
@@ -90,8 +76,6 @@ app.post("/api/saveExplanation", async (req, res) => {
     res.status(500).send({ error: "Server error. Please try again later." });
   }
 });
-
-
 
 // Start the server
 const PORT = 5000;

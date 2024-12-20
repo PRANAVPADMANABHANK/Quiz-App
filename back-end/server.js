@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON request bodies
 
+//database configuration
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))

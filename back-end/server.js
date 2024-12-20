@@ -49,7 +49,7 @@ app.post("/api/saveExplanation", async (req, res) => {
   try {
     const { questionId, selectedOption, isCorrect } = req.body;
 
-    console.log(req.body, "req.body");
+    // console.log(req.body, "req.body");
 
     // Check if required fields are present
     if (!questionId || selectedOption === undefined || isCorrect === undefined) {
@@ -88,3 +88,4 @@ const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+     

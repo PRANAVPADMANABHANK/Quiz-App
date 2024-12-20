@@ -1,17 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Question from "./Question";
 
-function Quiz({ questions }) {
+function Quiz() {
   const [currentCategory, setCurrentCategory] = useState("Mathematics");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
   const [showExplanation, setShowExplanation] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
-  const categories = [...new Set(questions.map((q) => q.category))];
-  const filteredQuestions = questions.filter(
+  const [quizData, setQuizData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch quiz data from the backend
+  useEffect(() => {
+    fetch("http://localhost:5000/api/questions")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch quiz data");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Fetched quiz data:", data); // Log fetched data
+        setQuizData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching quiz data:", err.message);
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  // Get unique categories from the fetched data
+  const categories = [...new Set(quizData.map((q) => q.category))];
+
+  // Filter questions based on the current category
+  const filteredQuestions = quizData.filter(
     (q) => q.category === currentCategory
   );
 
+  // Get the current question based on the index
   const currentQuestion =
     filteredQuestions.length > 0
       ? filteredQuestions[currentQuestionIndex - 1]
@@ -54,6 +83,14 @@ function Quiz({ questions }) {
     setShowExplanation((prev) => !prev);
   };
 
+  if (loading) {
+    return <p>Loading quiz data...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div className="quiz-container">
       <div className="header">
@@ -76,12 +113,14 @@ function Quiz({ questions }) {
           >
             <h4>{category}</h4>
             <div className="numbers">
-              {questions
+              {quizData
                 .filter((q) => q.category === category)
-                .map((_, index) => (
+                .map((q, index) => (
                   <span
                     key={index}
                     className={`number ${
+                      q.selectedOption !== null ? "marked" : ""
+                    } ${
                       currentCategory === category &&
                       currentQuestionIndex === index + 1
                         ? "active"
@@ -98,6 +137,7 @@ function Quiz({ questions }) {
           </div>
         ))}
       </div>
+
       {currentQuestion ? (
         <>
           <Question

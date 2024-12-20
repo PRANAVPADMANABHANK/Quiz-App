@@ -20,8 +20,10 @@ const questionSchema = new mongoose.Schema({
   options: [String],
   correctAnswer: Number,
   explanation: String,
-  selectedOption: Number, // New field to store the selected option
+  selectedOption: Number, // Field to store the selected option
+  isCorrect: Boolean, // New field to store correctness of the selected option
 });
+
 
 const Question = mongoose.model("Question", questionSchema);
 
@@ -56,6 +58,7 @@ app.post("/api/questions", async (req, res) => {
 });
 
 // POST API to save explanation details and update selectedOption in the question
+// POST API to save explanation details and update selectedOption and isCorrect in the question
 app.post("/api/saveExplanation", async (req, res) => {
   try {
     const { questionId, selectedOption, isCorrect } = req.body;
@@ -63,11 +66,7 @@ app.post("/api/saveExplanation", async (req, res) => {
     console.log(req.body, "req.body");
 
     // Check if required fields are present
-    if (
-      !questionId ||
-      selectedOption === undefined ||
-      isCorrect === undefined
-    ) {
+    if (!questionId || selectedOption === undefined || isCorrect === undefined) {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
@@ -91,6 +90,7 @@ app.post("/api/saveExplanation", async (req, res) => {
     res.status(500).send({ error: "Server error. Please try again later." });
   }
 });
+
 
 
 // Start the server

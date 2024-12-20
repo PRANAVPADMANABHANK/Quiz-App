@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Options from "./Options";
 import Explanation from "./Explanation";
+import config from "../utils/config"; // Import the config file
+
 
 function Question({ question }) {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -15,12 +17,12 @@ function Question({ question }) {
   const toggleExplanation = async () => {
     if (!showExplanation) {
       // Log to check questionId
-      console.log("Sending questionId:", question._id);
+      // console.log("Sending questionId:", question._id);
   
       // Make API call to save the explanation view
       setSaving(true);
       try {
-        const response = await fetch("http://localhost:5000/api/saveExplanation", {
+        const response = await fetch(`${config.API_URL}/saveExplanation`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

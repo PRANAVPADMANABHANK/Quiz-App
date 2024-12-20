@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { FaSyncAlt } from "react-icons/fa"; // Import refresh icon
 import Question from "./Question";
+import config from "../utils/config"; // Import the config file
 
 function Quiz() {
   const [currentCategory, setCurrentCategory] = useState("Mathematics");
@@ -8,12 +10,14 @@ function Quiz() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   const [quizData, setQuizData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Use loading state for fetch
   const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false); // Track if we are refreshing
 
   // Fetch quiz data from the backend
-  useEffect(() => {
-    fetch("http://localhost:5000/api/questions")
+  const fetchQuizData = () => {
+    setRefreshing(true); // Set refreshing to true when fetching
+    fetch(`${config.API_URL}/questions`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch quiz data");
@@ -21,16 +25,20 @@ function Quiz() {
         return res.json();
       })
       .then((data) => {
-        console.log("Fetched quiz data:", data); // Log fetched data
         setQuizData(data);
         setLoading(false);
+        setRefreshing(false); // Reset refreshing when done
       })
       .catch((err) => {
-        console.error("Error fetching quiz data:", err.message);
         setError(err.message);
         setLoading(false);
+        setRefreshing(false);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchQuizData();
+  }, []); // Initial data fetch
 
   // Get unique categories from the fetched data
   const categories = [...new Set(quizData.map((q) => q.category))];
@@ -51,6 +59,8 @@ function Quiz() {
       setCurrentQuestionIndex((prev) => prev + 1);
       setShowExplanation(false);
       setSelectedAnswer(null);
+      setLoading(true); // Set loading true when navigating
+      fetchQuizData(); // Fetch data in background
     }
   };
 
@@ -59,6 +69,8 @@ function Quiz() {
       setCurrentQuestionIndex((prev) => prev - 1);
       setShowExplanation(false);
       setSelectedAnswer(null);
+      setLoading(true); // Set loading true when navigating
+      fetchQuizData(); // Fetch data in background
     }
   };
 
@@ -66,6 +78,8 @@ function Quiz() {
     setCurrentQuestionIndex(index + 1);
     setShowExplanation(false);
     setSelectedAnswer(null);
+    setLoading(true); // Set loading true when navigating
+    fetchQuizData(); // Fetch data in background
   };
 
   const changeCategory = (category) => {
@@ -73,6 +87,8 @@ function Quiz() {
     setCurrentQuestionIndex(1); // Reset to the first question in the new category
     setShowExplanation(false);
     setSelectedAnswer(null);
+    setLoading(true); // Set loading true when changing category
+    fetchQuizData(); // Fetch data in background
   };
 
   const handleAnswerSelect = (answerIndex) => {
@@ -83,16 +99,17 @@ function Quiz() {
     setShowExplanation((prev) => !prev);
   };
 
-  if (loading) {
-    return <p>Loading quiz data...</p>;
-  }
-
   if (error) {
     return <p>Error: {error}</p>;
   }
 
   return (
     <div className="quiz-container">
+      {/* Refresh Button */}
+      {/* <button className="refresh-button" onClick={fetchQuizData}>
+        <FaSyncAlt /> Refresh Quiz
+      </button> */}
+
       <div className="header">
         <h2>{currentCategory}</h2>
         <div className="progress">
@@ -102,13 +119,12 @@ function Quiz() {
           </a>
         </div>
       </div>
+
       <div className="categories">
         {categories.map((category) => (
           <div
             key={category}
-            className={`category ${
-              currentCategory === category ? "active" : ""
-            }`}
+            className={`category ${currentCategory === category ? "active" : ""}`}
             onClick={() => changeCategory(category)}
           >
             <h4>{category}</h4>
@@ -159,6 +175,7 @@ function Quiz() {
       ) : (
         <p>No questions available in this category.</p>
       )}
+
       <div className="navigation">
         <button onClick={goToPrev} disabled={currentQuestionIndex === 1}>
           Prev
@@ -170,6 +187,9 @@ function Quiz() {
           Next
         </button>
       </div>
+
+      {/* Loading spinner */}
+      {refreshing && <div className="loading-spinner">Loading...</div>}
     </div>
   );
 }
